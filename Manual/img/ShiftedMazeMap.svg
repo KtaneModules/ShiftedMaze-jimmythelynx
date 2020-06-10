@@ -30,7 +30,10 @@
             <path d="M200.002,700L100,700L100,500" style="fill:none;stroke:black;stroke-width:6px;"/>
         </g>
         <g transform="matrix(1,0,0,1,-100,-100)">
-            <path d="M100,200L100,400L200.002,400L200.002,600" style="fill:none;stroke:black;stroke-width:6px;"/>
+            <path d="M100,200L100,400L200.002,400" style="fill:none;stroke:black;stroke-width:6px;"/>
+        </g>
+        <g transform="matrix(1,0,0,1,-100,-100)">
+            <path d="M200.002,500L200.002,600" style="fill:none;stroke:black;stroke-width:6px;"/>
         </g>
         <g transform="matrix(1,0,0,1,-100,-100)">
             <path d="M500.038,600L500.038,400" style="fill:none;stroke:black;stroke-width:6px;"/>

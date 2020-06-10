@@ -47,7 +47,7 @@ public class shiftedMazeScript : MonoBehaviour
 	private int[,] validMovLeft = new int[6,6] { {1, 1, 1, 1, 1, 0},
  																							 {0, 0, 1, 0, 1, 1},
 																						 	 {0, 1, 0, 0, 1, 0},
-																						   {1, 0, 0, 1, 0, 0},
+																						   {1, 1, 0, 1, 0, 0},
 																						 	 {0, 0, 1, 0, 0, 1},
 																						   {0, 1, 0, 1, 1, 1} };
 
