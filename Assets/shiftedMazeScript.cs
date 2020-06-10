@@ -1,0 +1,374 @@
+using System;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using KModkit;
+
+public class shiftedMazeScript : MonoBehaviour
+{
+	public KMAudio Audio;
+	public KMBombInfo bomb;
+ // Directional Buttons
+	public KMSelectable moveUp;
+	public KMSelectable moveDown;
+	public KMSelectable moveLeft;
+	public KMSelectable moveRight;
+
+	private int xPos = 0; //marks your current position
+	private int yPos = 0;
+
+	//these are the offsets (1-5) to the right (x) or down (y)
+	private int xOffset = 0;
+	private int yOffset = 0;
+
+	// mapps every position in the maze to a unique number
+	private int[,] maze = new int[6,6] { {0, 1, 2, 3, 4, 5},
+																			 {6, 7, 8, 9, 10, 11},
+																			 {12, 13, 14, 15, 16, 17},
+																			 {18, 19, 20, 21, 22, 23},
+																			 {24, 25, 26, 27, 28, 29},
+ 																		 	 {30, 31, 32, 33, 34, 35} };
+
+	// mapps each unique number to the corresponding dot on the grid
+	public TextMesh[] mazeIndex;
+	//links a number to each marker
+	public TextMesh[] markers; // 0 = (1,1), 1 = (1,4), 2 = (4,1) and 3 = (4,4) "(x,y)"
+
+	// hardcoding the values of the 4 marker onto the grid
+	private int[,] markerIndex = new int[6,6] { {0, 0, 0, 0, 0, 0},
+																						  {0, 0, 0, 0, 1, 0},
+																						  {0, 0, 0, 0, 0, 0},
+																						  {0, 0, 0, 0, 0, 0},
+																						  {0, 2, 0, 0, 3, 0},
+																						  {0, 0, 0, 0, 0, 0} };
+
+	//hardcoding if its possible to move left from any maze position: 0 = no, 1 = yes
+	private int[,] validMovLeft = new int[6,6] { {1, 1, 1, 1, 1, 0},
+ 																							 {0, 0, 1, 0, 1, 1},
+																						 	 {0, 1, 0, 0, 1, 0},
+																						   {1, 0, 0, 1, 0, 0},
+																						 	 {0, 0, 1, 0, 0, 1},
+																						   {0, 1, 0, 1, 1, 1} };
+
+  //hadcoding if its possible to move up from any maze position: 0 = no, 1 = yes
+	private int[,] validMovUp = new int[6,6] { {0, 1, 0, 0, 1, 1},
+																						 {1, 0, 1, 1, 0, 1},
+																					 	 {1, 1, 1, 1, 0, 1},
+																					 	 {0, 1, 1, 1, 1, 1},
+																					 	 {1, 1, 0, 1, 1, 1},
+																					 	 {1, 1, 1, 1, 1, 0} };
+
+  private int[] possibleStart = new int[2] {1, 4}; //holds the two possible position for inital xPos and yPos (1,1 / 1,4 / 4,1 / 4,4)
+
+	private int[,] goals = new int[4, 2] { {0, 0}, {0, 0}, {0, 0}, {0, 0} };// goals for stage 1, 2 and 3 and starting Position: (x, y)
+
+	private int stage = 0; // keeps track of how many stages (3 total) are solved
+	private int batteryCycle; // is the number D batteries mod 3
+
+	public Color[] fontColors; //these are the colors to change font colors 0 = black, 1 = white, 2 = blue, 3 = yellow, 4 = purple, 5 = invisible, 6 = neongreen, 7 = green
+ 	public Material[] screenMaterial; //materials for the background screen 0 = blue, 1 = red
+	public MeshRenderer screen; // holds the connection to the screen object
+	//Logging
+	static int moduleIdCounter = 1;
+	int moduleId;
+	private bool moduleSolved;
+	private bool inStrike;
+	private string[] markerLog = new string[3] {"diagonally opposite corner", "same row", "same column"};
+
+
+	void Awake ()
+	{
+		moduleId = moduleIdCounter++;
+		//delegate button press to method
+		moveLeft.OnInteract += delegate () { PressLeft(); return false; };
+		moveRight.OnInteract += delegate () { PressRight(); return false; };
+		moveUp.OnInteract += delegate () { PressUp(); return false; };
+		moveDown.OnInteract += delegate () { PressDown(); return false; };
+	}
+
+	// Use this for initialization
+	void Start ()
+	{
+		CalculateStartingPoint();
+		CalculateGoals();
+		CalculateOffset();
+	}
+
+	// Update is called once per frame
+/*/	void Update ()
+	{
+
+	}/*/
+
+	void CalculateStartingPoint()
+	{
+		xPos = possibleStart[UnityEngine.Random.Range(0, 2)];
+		yPos = possibleStart[UnityEngine.Random.Range(0, 2)];
+		mazeIndex[maze[yPos, xPos]].color = fontColors[1]; // marks your current position in the grid white
+		markers[markerIndex[yPos, xPos]].color = fontColors[1]; // makes the marker on the starting position white
+		goals[3, 0] = xPos; // remembering starting position
+		goals[3, 1] = yPos;
+		Debug.LogFormat("[Shifting Maze #{0}] Your starting position is: x:{1}, y:{2}.", moduleId, xPos, yPos);
+	}
+
+	void CalculateGoals()
+	{
+		batteryCycle = bomb.GetBatteryCount(Battery.D) % 3;
+
+		goals[Mod((0 - batteryCycle), 3), 0] = (xPos + 3) % 6; //this makes the first goal diagonally opposite of the starting location
+		goals[Mod((0 - batteryCycle), 3), 1] = (yPos + 3) % 6;
+
+		goals[Mod((1 - batteryCycle), 3), 0] = (xPos + 3) % 6; // this makes the second goal horizontally opposite of the starting location
+		goals[Mod((1 - batteryCycle), 3), 1] = yPos;
+
+		goals[2 - batteryCycle, 0] = xPos; // this makes the final goal vertically opposite of the starting location
+		goals[2 - batteryCycle, 1] = (yPos + 3) % 6;
+
+		Debug.LogFormat("[Shifting Maze #{0}] Your initial route is to: x:{1}, y:{2} then to x:{3}, y:{4} finally to x:{5}, y:{6}.", moduleId, goals[0, 0], goals[0, 1], goals[1, 0], goals[1, 1], goals[2, 0], goals[2, 1]);
+		Debug.LogFormat("[Shifting Maze #{0}] Number of D-Batteries is: {1}, thus cycle the goals forward by {2}", moduleId, bomb.GetBatteryCount(Battery.D), batteryCycle);
+		Debug.LogFormat("[Shifting Maze #{0}] You first go to the marker in the {1}, then to the marker in the {2} and finally to the marker in the {3}, relative to the starting position.", moduleId, markerLog[batteryCycle], markerLog[(batteryCycle + 1) %3], markerLog[(batteryCycle + 2) %3]);
+	}
+
+	int Mod(int x, int m) // modulo function that always gives me a positive value back
+	{
+		return (x % m + m) % m;
+	}
+
+	void CalculateOffset()
+	{
+		xOffset = UnityEngine.Random.Range(0, 5);  // gives each direction a random offset between 0 and 5
+		yOffset = UnityEngine.Random.Range(0, 5);
+		Debug.LogFormat("[Shifting Maze #{0}] The maze is shifted {1} steps to the left and {2} steps up.", moduleId, xOffset, yOffset);
+		//coloring the diagonal opposite marker
+		if (xOffset > 2)
+		{
+			if (yOffset > 2) // if both offsets are over 2
+			{
+				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[2]; // marker diagonaly opposite start = blue
+				Debug.LogFormat("[Shifting Maze #{0}] Both the x and y offsets are below 2, so the diagonally opposite marker is BLUE", moduleId);
+			}
+			else // if x offset is over 2 but y is lower
+			{
+				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[4]; // marker diagonaly opposite start = purple
+				Debug.LogFormat("[Shifting Maze #{0}] The x offset is above 2 but the y offset is below 2, so the diagonally opposite marker is PURPLE", moduleId);
+			}
+		}
+		else
+		{
+			if (yOffset > 2) // if x offset is unter 2 but y offset is over
+			{
+				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[7]; // marker diagonaly opposite start = green
+				Debug.LogFormat("[Shifting Maze #{0}] The x offset is below 2 but the y offset is above 2, so the diagonally opposite marker is GREEN", moduleId);
+			}
+			else // if both offsets are under 2
+			{
+				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[3]; // marker diagonaly opposite start = yellow
+				Debug.LogFormat("[Shifting Maze #{0}] Both the x and y offsets are below 2, so the diagonally opposite marker is YELLOW", moduleId);
+			}
+		}
+		// coloring the marker in the same row as start
+		if (xOffset == 0 || xOffset == 4)
+		{
+			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[3]; // marker horizontaly opposite start = yellow
+			Debug.LogFormat("[Shifting Maze #{0}] The horizontal offset is either 0 or +4, so the marker in the same row is YELLOW", moduleId);
+		}
+		else if (xOffset == 1 || xOffset == 3)
+		{
+			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[4]; // marker horizontaly opposite start = purple
+			Debug.LogFormat("[Shifting Maze #{0}] The horizontal offset is either +1 or +3, so the marker in the same row is PURPLE", moduleId);
+		}
+		else
+		{
+			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[2]; // marker horizontaly opposite start = blue
+			Debug.LogFormat("[Shifting Maze #{0}] The horizontal offset is either +2 or +5, so the marker in the same row is BLUE", moduleId);
+		}
+		//coloring the marker in the same column as start
+		if (yOffset == 0 || yOffset == 5)
+		{
+			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[4]; // marker verticaly opposite start = purple
+			Debug.LogFormat("[Shifting Maze #{0}] The vertical offset is either 0 or +5, so the marker in the same column is PURPLE", moduleId);
+		}
+		else if (yOffset == 1 || yOffset == 4)
+		{
+			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[2]; // marker verticaly opposite start = blue
+			Debug.LogFormat("[Shifting Maze #{0}] The vertical offset is either +1 or +4, so the marker in the same column is BLUE", moduleId);
+		}
+		else
+		{
+			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[3]; // marker verticaly opposite start = yellow
+			Debug.LogFormat("[Shifting Maze #{0}] The vertical offset is either +2 or +3, so the marker in the same column is YELLOW", moduleId);
+		}
+	}
+
+	void CheckOnGoal()
+	{
+		if (stage == 0) // if you're in stage 1
+		{
+			if ((xPos == goals[0, 0]) && (yPos == goals[0, 1])) // and your position equals the first goal
+			{
+				stage ++; // increase the stage
+				markers[markerIndex[yPos, xPos]].color = fontColors[6]; // makes marker on curren position green
+				Audio.PlaySoundAtTransform("beep", transform); //play beep sound
+				Debug.LogFormat("[Shifting Maze #{0}] You moved on x:{1}, y:{2} and reached the first goal.", moduleId, xPos, yPos);
+			}
+			else if ((xPos == goals[3, 0]) && (yPos == goals[3, 1])) // and you revisit the start
+			{
+				return; // do nothing
+			}
+			else // but if you're on the second or final goal in the first stage, give a strike
+			{
+				GetComponent<KMBombModule>().HandleStrike();
+				StartCoroutine(Strike());
+				Debug.LogFormat("[Shifting Maze #{0}] You moved on x:{1}, y:{2}. That's not your first goal, strike!", moduleId, xPos, yPos);
+			}
+		}
+		else if (stage == 1) // if you're in the secon Stage
+		{
+			if ((xPos == goals[1, 0]) && (yPos == goals[1, 1])) // and your position equals the second goals
+			{
+				stage ++; //increase the stage
+				markers[markerIndex[yPos, xPos]].color = fontColors[6]; // makes marker on curren position green
+				Audio.PlaySoundAtTransform("beep", transform); //play beep sound
+				Debug.LogFormat("[Shifting Maze #{0}] You moved on x:{1}, y:{2} and reached the second goal.", moduleId, xPos, yPos);
+			}
+			else if ((xPos == goals[2, 0]) && (yPos == goals[2, 1])) // but you're on the position of the final goal, give a strike
+		  {
+			GetComponent<KMBombModule>().HandleStrike();
+			StartCoroutine(Strike());
+			Debug.LogFormat("[Shifting Maze #{0}] You moved on x:{1}, y:{2}. That's not your second goal, strike!", moduleId, xPos, yPos);
+		  }
+			else // else, if you revisit the start or the position of goal 1, do nothing
+			{
+				return;
+			}
+		}
+		else // if you're in the final stage
+		{
+			if ((xPos == goals[2, 0]) && (yPos == goals[2, 1])) // and you're in the position of the final goal, solve the module
+			{
+				moduleSolved = true;
+				GetComponent<KMBombModule>().HandlePass();
+				markers[markerIndex[yPos, xPos]].color = fontColors[6]; // makes marker on current position and start green
+				markers[markerIndex[goals[3, 1], goals[3, 0]]].color = fontColors[6];
+				Audio.PlaySoundAtTransform("beep", transform);
+
+				Debug.LogFormat("[Shifting Maze #{0}] You moved on x:{1}, y:{2} and reached the last goal. The module is solved!", moduleId, xPos, yPos);
+			}
+			else // but if you revisit every other position (start, 1st goal, 2nd goal), do nothing
+			{
+				return;
+			}
+		}
+	}
+
+
+
+	void PressLeft()
+	{
+		if(moduleSolved || inStrike){return;}
+		moveLeft.AddInteractionPunch();
+		GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+
+		mazeIndex[maze[yPos, xPos]].color = fontColors[0]; // color the node you leave black
+		if ((xPos > 0) && (validMovLeft[(yPos + yOffset) %6, (xPos + xOffset) %6] == 1)) // if the move is allowed (no wall, no edge), increase the x value
+		{
+			xPos --;
+		}
+		else // if the move is not allowed handle a strike
+		{
+			GetComponent<KMBombModule>().HandleStrike();
+			StartCoroutine(Strike());
+			Debug.LogFormat("[Shifting Maze #{0}] Your tried to move left from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
+		}
+
+		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
+		{
+			CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+		}
+		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
+		else {mazeIndex[maze[yPos, xPos]].color = fontColors[1];} // color the node you moved to white.
+	}
+
+	void PressRight()
+	{
+		if(moduleSolved || inStrike){return;}
+		moveRight.AddInteractionPunch();
+		GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+
+		mazeIndex[maze[yPos, xPos]].color = fontColors[0];
+		if ((xPos < 5) && (validMovLeft[(yPos + yOffset) %6, (xPos + xOffset + 1) %6] == 1)) {xPos ++;}
+		else
+		{
+			GetComponent<KMBombModule>().HandleStrike();
+			StartCoroutine(Strike());
+			Debug.LogFormat("[Shifting Maze #{0}] Your tried to move right from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
+		}
+
+		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
+		{
+			CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+		}
+
+		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
+		else {mazeIndex[maze[yPos, xPos]].color = fontColors[1];} // color the node you moved to white.
+	}
+
+	void PressUp()
+	{
+		if(moduleSolved || inStrike){return;}
+		moveUp.AddInteractionPunch();
+		GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+
+		mazeIndex[maze[yPos, xPos]].color = fontColors[0];
+		if ((yPos > 0) && (validMovUp[(yPos + yOffset) %6, (xPos + xOffset) %6] == 1)) {yPos --;}
+		else
+		{
+			GetComponent<KMBombModule>().HandleStrike();
+			StartCoroutine(Strike());
+			Debug.LogFormat("[Shifting Maze #{0}] Your tried to move up from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
+		}
+
+		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
+		{
+			CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+		}
+
+		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
+		else {mazeIndex[maze[yPos, xPos]].color = fontColors[1];} // color the node you moved to white.
+	}
+
+	void PressDown()
+	{
+		if(moduleSolved || inStrike){return;}
+		moveDown.AddInteractionPunch();
+		GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+
+		mazeIndex[maze[yPos, xPos]].color = fontColors[0];
+		if ((yPos < 5) && (validMovUp[(yPos + yOffset + 1) %6, (xPos + xOffset) %6] == 1)) {yPos ++;}
+		else
+		{
+			GetComponent<KMBombModule>().HandleStrike();
+			StartCoroutine(Strike());
+			Debug.LogFormat("[Shifting Maze #{0}] Your tried to move down from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
+		}
+
+		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
+		{
+			CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+		}
+
+		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
+		else {mazeIndex[maze[yPos, xPos]].color = fontColors[1];} // color the node you moved to white.
+	}
+
+
+IEnumerator Strike()
+	{
+		inStrike = true;
+		screen.material = screenMaterial[1]; // set screen to red
+		yield return new WaitForSeconds(.8f);
+		screen.material = screenMaterial[0]; // set screen to blue
+		inStrike = false;
+	}
+}

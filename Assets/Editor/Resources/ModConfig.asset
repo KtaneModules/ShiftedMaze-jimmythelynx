@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
+  m_Name: ModConfig
+  m_EditorClassIdentifier: 
+  id: shiftedMaze
+  title: Shifted Maze
+  author: jimmythelynx
+  description: 'Shifted Maze 1.0
+
+    A new take on the classical 2D maze. There''s only one unique maze that is randomly
+    shifted. The defuser must navigate to three coordinates in order.
+
+    Little edgework required.
+
+
+    Module ID: shiftedMaze
+
+
+    Created by: jimmythelynx
+
+
+    A huge shout out to Royal_Flu$h whose video tutorial kickstarted my modding ambitions.
+
+    The module is using a sound file taken from "Symbolic Coordinates" by Royal_Flu$h.'
+  version: 1.0
+  outputFolder: build
+  previewImage: {fileID: 2800000, guid: 86091ecae36564667a23721697691c8c, type: 3}
