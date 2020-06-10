@@ -13,4 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WorkshopPublishedFileID: 0
   Title: Shifted Maze
-  Tags: []
+  Tags:
+  - Regular Module

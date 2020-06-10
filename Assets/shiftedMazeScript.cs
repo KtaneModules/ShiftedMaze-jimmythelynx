@@ -109,7 +109,7 @@ public class shiftedMazeScript : MonoBehaviour
 		markers[markerIndex[yPos, xPos]].color = fontColors[1]; // makes the marker on the starting position white
 		goals[3, 0] = xPos; // remembering starting position
 		goals[3, 1] = yPos;
-		Debug.LogFormat("[Shifting Maze #{0}] Your starting position is: x:{1}, y:{2}.", moduleId, xPos, yPos);
+		Debug.LogFormat("[Shifted Maze #{0}] Your starting position is: x:{1}, y:{2}.", moduleId, xPos, yPos);
 	}
 
 	void CalculateGoals()
@@ -125,9 +125,9 @@ public class shiftedMazeScript : MonoBehaviour
 		goals[2 - batteryCycle, 0] = xPos; // this makes the final goal vertically opposite of the starting location
 		goals[2 - batteryCycle, 1] = (yPos + 3) % 6;
 
-		Debug.LogFormat("[Shifting Maze #{0}] Your initial route is to: x:{1}, y:{2} then to x:{3}, y:{4} finally to x:{5}, y:{6}.", moduleId, goals[0, 0], goals[0, 1], goals[1, 0], goals[1, 1], goals[2, 0], goals[2, 1]);
-		Debug.LogFormat("[Shifting Maze #{0}] Number of D-Batteries is: {1}, thus cycle the goals forward by {2}", moduleId, bomb.GetBatteryCount(Battery.D), batteryCycle);
-		Debug.LogFormat("[Shifting Maze #{0}] You first go to the marker in the {1}, then to the marker in the {2} and finally to the marker in the {3}, relative to the starting position.", moduleId, markerLog[batteryCycle], markerLog[(batteryCycle + 1) %3], markerLog[(batteryCycle + 2) %3]);
+		Debug.LogFormat("[Shifted Maze #{0}] Your initial route is to: x:{1}, y:{2} then to x:{3}, y:{4} finally to x:{5}, y:{6}.", moduleId, goals[0, 0], goals[0, 1], goals[1, 0], goals[1, 1], goals[2, 0], goals[2, 1]);
+		Debug.LogFormat("[Shifted Maze #{0}] Number of D-Batteries is: {1}, thus cycle the goals forward by {2}", moduleId, bomb.GetBatteryCount(Battery.D), batteryCycle);
+		Debug.LogFormat("[Shifted Maze #{0}] You first go to the marker in the {1}, then to the marker in the {2} and finally to the marker in the {3}, relative to the starting position.", moduleId, markerLog[batteryCycle], markerLog[(batteryCycle + 1) %3], markerLog[(batteryCycle + 2) %3]);
 	}
 
 	int Mod(int x, int m) // modulo function that always gives me a positive value back
@@ -139,19 +139,19 @@ public class shiftedMazeScript : MonoBehaviour
 	{
 		xOffset = UnityEngine.Random.Range(0, 5);  // gives each direction a random offset between 0 and 5
 		yOffset = UnityEngine.Random.Range(0, 5);
-		Debug.LogFormat("[Shifting Maze #{0}] The maze is shifted {1} steps to the left and {2} steps up.", moduleId, xOffset, yOffset);
+		Debug.LogFormat("[Shifted Maze #{0}] The maze is shifted {1} steps to the left and {2} steps up.", moduleId, xOffset, yOffset);
 		//coloring the diagonal opposite marker
 		if (xOffset > 2)
 		{
 			if (yOffset > 2) // if both offsets are over 2
 			{
 				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[2]; // marker diagonaly opposite start = blue
-				Debug.LogFormat("[Shifting Maze #{0}] Both the x and y offsets are below 2, so the diagonally opposite marker is BLUE", moduleId);
+				Debug.LogFormat("[Shifted Maze #{0}] Both the x and y offsets are below 2, so the diagonally opposite marker is BLUE", moduleId);
 			}
 			else // if x offset is over 2 but y is lower
 			{
 				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[4]; // marker diagonaly opposite start = purple
-				Debug.LogFormat("[Shifting Maze #{0}] The x offset is above 2 but the y offset is below 2, so the diagonally opposite marker is PURPLE", moduleId);
+				Debug.LogFormat("[Shifted Maze #{0}] The x offset is above 2 but the y offset is below 2, so the diagonally opposite marker is PURPLE", moduleId);
 			}
 		}
 		else
@@ -159,45 +159,45 @@ public class shiftedMazeScript : MonoBehaviour
 			if (yOffset > 2) // if x offset is unter 2 but y offset is over
 			{
 				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[7]; // marker diagonaly opposite start = green
-				Debug.LogFormat("[Shifting Maze #{0}] The x offset is below 2 but the y offset is above 2, so the diagonally opposite marker is GREEN", moduleId);
+				Debug.LogFormat("[Shifted Maze #{0}] The x offset is below 2 but the y offset is above 2, so the diagonally opposite marker is GREEN", moduleId);
 			}
 			else // if both offsets are under 2
 			{
 				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[3]; // marker diagonaly opposite start = yellow
-				Debug.LogFormat("[Shifting Maze #{0}] Both the x and y offsets are below 2, so the diagonally opposite marker is YELLOW", moduleId);
+				Debug.LogFormat("[Shifted Maze #{0}] Both the x and y offsets are below 2, so the diagonally opposite marker is YELLOW", moduleId);
 			}
 		}
 		// coloring the marker in the same row as start
 		if (xOffset == 0 || xOffset == 4)
 		{
 			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[3]; // marker horizontaly opposite start = yellow
-			Debug.LogFormat("[Shifting Maze #{0}] The horizontal offset is either 0 or +4, so the marker in the same row is YELLOW", moduleId);
+			Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is either 0 or +4, so the marker in the same row is YELLOW", moduleId);
 		}
 		else if (xOffset == 1 || xOffset == 3)
 		{
 			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[4]; // marker horizontaly opposite start = purple
-			Debug.LogFormat("[Shifting Maze #{0}] The horizontal offset is either +1 or +3, so the marker in the same row is PURPLE", moduleId);
+			Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is either +1 or +3, so the marker in the same row is PURPLE", moduleId);
 		}
 		else
 		{
 			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[2]; // marker horizontaly opposite start = blue
-			Debug.LogFormat("[Shifting Maze #{0}] The horizontal offset is either +2 or +5, so the marker in the same row is BLUE", moduleId);
+			Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is either +2 or +5, so the marker in the same row is BLUE", moduleId);
 		}
 		//coloring the marker in the same column as start
 		if (yOffset == 0 || yOffset == 5)
 		{
 			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[4]; // marker verticaly opposite start = purple
-			Debug.LogFormat("[Shifting Maze #{0}] The vertical offset is either 0 or +5, so the marker in the same column is PURPLE", moduleId);
+			Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is either 0 or +5, so the marker in the same column is PURPLE", moduleId);
 		}
 		else if (yOffset == 1 || yOffset == 4)
 		{
 			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[2]; // marker verticaly opposite start = blue
-			Debug.LogFormat("[Shifting Maze #{0}] The vertical offset is either +1 or +4, so the marker in the same column is BLUE", moduleId);
+			Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is either +1 or +4, so the marker in the same column is BLUE", moduleId);
 		}
 		else
 		{
 			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[3]; // marker verticaly opposite start = yellow
-			Debug.LogFormat("[Shifting Maze #{0}] The vertical offset is either +2 or +3, so the marker in the same column is YELLOW", moduleId);
+			Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is either +2 or +3, so the marker in the same column is YELLOW", moduleId);
 		}
 	}
 
@@ -210,7 +210,7 @@ public class shiftedMazeScript : MonoBehaviour
 				stage ++; // increase the stage
 				markers[markerIndex[yPos, xPos]].color = fontColors[6]; // makes marker on curren position green
 				Audio.PlaySoundAtTransform("beep", transform); //play beep sound
-				Debug.LogFormat("[Shifting Maze #{0}] You moved on x:{1}, y:{2} and reached the first goal.", moduleId, xPos, yPos);
+				Debug.LogFormat("[Shifted Maze #{0}] You moved on x:{1}, y:{2} and reached the first goal.", moduleId, xPos, yPos);
 			}
 			else if ((xPos == goals[3, 0]) && (yPos == goals[3, 1])) // and you revisit the start
 			{
@@ -220,7 +220,7 @@ public class shiftedMazeScript : MonoBehaviour
 			{
 				GetComponent<KMBombModule>().HandleStrike();
 				StartCoroutine(Strike());
-				Debug.LogFormat("[Shifting Maze #{0}] You moved on x:{1}, y:{2}. That's not your first goal, strike!", moduleId, xPos, yPos);
+				Debug.LogFormat("[Shifted Maze #{0}] You moved on x:{1}, y:{2}. That's not your first goal, strike!", moduleId, xPos, yPos);
 			}
 		}
 		else if (stage == 1) // if you're in the secon Stage
@@ -230,13 +230,13 @@ public class shiftedMazeScript : MonoBehaviour
 				stage ++; //increase the stage
 				markers[markerIndex[yPos, xPos]].color = fontColors[6]; // makes marker on curren position green
 				Audio.PlaySoundAtTransform("beep", transform); //play beep sound
-				Debug.LogFormat("[Shifting Maze #{0}] You moved on x:{1}, y:{2} and reached the second goal.", moduleId, xPos, yPos);
+				Debug.LogFormat("[Shifted Maze #{0}] You moved on x:{1}, y:{2} and reached the second goal.", moduleId, xPos, yPos);
 			}
 			else if ((xPos == goals[2, 0]) && (yPos == goals[2, 1])) // but you're on the position of the final goal, give a strike
 		  {
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifting Maze #{0}] You moved on x:{1}, y:{2}. That's not your second goal, strike!", moduleId, xPos, yPos);
+			Debug.LogFormat("[Shifted Maze #{0}] You moved on x:{1}, y:{2}. That's not your second goal, strike!", moduleId, xPos, yPos);
 		  }
 			else // else, if you revisit the start or the position of goal 1, do nothing
 			{
@@ -253,7 +253,7 @@ public class shiftedMazeScript : MonoBehaviour
 				markers[markerIndex[goals[3, 1], goals[3, 0]]].color = fontColors[6];
 				Audio.PlaySoundAtTransform("beep", transform);
 
-				Debug.LogFormat("[Shifting Maze #{0}] You moved on x:{1}, y:{2} and reached the last goal. The module is solved!", moduleId, xPos, yPos);
+				Debug.LogFormat("[Shifted Maze #{0}] You moved on x:{1}, y:{2} and reached the last goal. The module is solved!", moduleId, xPos, yPos);
 			}
 			else // but if you revisit every other position (start, 1st goal, 2nd goal), do nothing
 			{
@@ -279,7 +279,7 @@ public class shiftedMazeScript : MonoBehaviour
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifting Maze #{0}] Your tried to move left from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
+			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move left from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
 		}
 
 		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
@@ -302,7 +302,7 @@ public class shiftedMazeScript : MonoBehaviour
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifting Maze #{0}] Your tried to move right from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
+			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move right from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
 		}
 
 		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
@@ -326,7 +326,7 @@ public class shiftedMazeScript : MonoBehaviour
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifting Maze #{0}] Your tried to move up from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
+			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move up from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
 		}
 
 		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
@@ -350,7 +350,7 @@ public class shiftedMazeScript : MonoBehaviour
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifting Maze #{0}] Your tried to move down from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
+			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move down from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
 		}
 
 		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
