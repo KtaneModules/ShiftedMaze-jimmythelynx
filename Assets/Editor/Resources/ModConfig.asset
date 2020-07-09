@@ -14,23 +14,13 @@ MonoBehaviour:
   id: shiftedMaze
   title: Shifted Maze
   author: jimmythelynx
-  description: 'Shifted Maze 1.0
-
-    A new take on the classical 2D maze. There''s only one unique maze that is randomly
-    shifted. The defuser must navigate to three coordinates in order.
-
-    Little edgework required.
-
-
-    Module ID: shiftedMaze
-
-
-    Created by: jimmythelynx
-
-
-    A huge shout out to Royal_Flu$h whose video tutorial kickstarted my modding ambitions.
-
-    The module is using a sound file taken from "Symbolic Coordinates" by Royal_Flu$h.'
-  version: 1.0
+  description: "Shifted\_Maze\nA new take on the classical 2D maze. There's only one
+    unique maze that is randomly\_shifted. The defuser must navigate to three marked
+    coordinates in the correct order.\nLittle edgework required.\n\nModule ID:\_shiftedMaze\n\nRepository:\_https://github.com/jimmythelynx/ShiftedMaze\n\nCreated
+    by: jimmythelynx\nAdditional coding by: eXish (Colorblind support, Controller
+    support, Twitch Play support and Autosolver)\n\nThanks to Royal_Flu$h whose video
+    tutorial kickstarted my modding ambitions.\nThe module is using a sound file taken
+    from \"Symbolic Coordinates\" by Royal_Flu$h."
+  version: 1.2
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 86091ecae36564667a23721697691c8c, type: 3}

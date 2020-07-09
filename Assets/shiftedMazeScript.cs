@@ -149,7 +149,7 @@ public class shiftedMazeScript : MonoBehaviour
         colorblindTexts[markerIndex[yPos, xPos]].text = "W";
         goals[3, 0] = xPos; // remembering starting position
 		goals[3, 1] = yPos;
-		Debug.LogFormat("[Shifted Maze #{0}] Your starting position is: x:{1}, y:{2}.", moduleId, xPos, yPos);
+		Debug.LogFormat("[Shifted Maze #{0}] Your starting position is: x:{1}, y:{2}. (With 1,1 being the top left corner.)", moduleId, xPos+1, yPos+1);
 	}
 
 	void CalculateGoals()
@@ -165,7 +165,7 @@ public class shiftedMazeScript : MonoBehaviour
 		goals[2 - batteryCycle, 0] = xPos; // this makes the final goal vertically opposite of the starting location
 		goals[2 - batteryCycle, 1] = (yPos + 3) % 6;
 
-		Debug.LogFormat("[Shifted Maze #{0}] Your initial route is to: x:{1}, y:{2} then to x:{3}, y:{4} finally to x:{5}, y:{6}.", moduleId, goals[0, 0], goals[0, 1], goals[1, 0], goals[1, 1], goals[2, 0], goals[2, 1]);
+		Debug.LogFormat("[Shifted Maze #{0}] Your initial route is to: x:{1}, y:{2} then to x:{3}, y:{4} finally to x:{5}, y:{6}.", moduleId, goals[0, 0]+1, goals[0, 1]+1, goals[1, 0]+1, goals[1, 1]+1, goals[2, 0]+1, goals[2, 1]+1);
 		Debug.LogFormat("[Shifted Maze #{0}] Number of D-Batteries is: {1}, thus cycle the goals forward by {2}", moduleId, bomb.GetBatteryCount(Battery.D), batteryCycle);
 		Debug.LogFormat("[Shifted Maze #{0}] You first go to the marker in the {1}, then to the marker in the {2} and finally to the marker in the {3}, relative to the starting position.", moduleId, markerLog[batteryCycle], markerLog[(batteryCycle + 1) %3], markerLog[(batteryCycle + 2) %3]);
 	}
@@ -187,7 +187,7 @@ public class shiftedMazeScript : MonoBehaviour
 			{
 				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[2]; // marker diagonaly opposite start = blue
                 colorblindTexts[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].text = "B";
-				Debug.LogFormat("[Shifted Maze #{0}] Both the x and y offsets are below 2, so the diagonally opposite marker is BLUE", moduleId);
+				Debug.LogFormat("[Shifted Maze #{0}] Both the x and y offsets are over 2, so the diagonally opposite marker is BLUE", moduleId);
 			}
 			else // if x offset is over 2 but y is lower
 			{
@@ -216,38 +216,38 @@ public class shiftedMazeScript : MonoBehaviour
 		{
 			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[3]; // marker horizontaly opposite start = yellow
             colorblindTexts[markerIndex[yPos, (xPos + 3) % 6]].text = "Y";
-            Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is either 0 or +4, so the marker in the same row is YELLOW", moduleId);
+            Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is 0 or +4, so the marker in the same row is YELLOW", moduleId);
 		}
 		else if (xOffset == 1 || xOffset == 3)
 		{
 			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[4]; // marker horizontaly opposite start = purple
             colorblindTexts[markerIndex[yPos, (xPos + 3) % 6]].text = "P";
-            Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is either +1 or +3, so the marker in the same row is PURPLE", moduleId);
+            Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is +1 or +3, so the marker in the same row is PURPLE", moduleId);
 		}
 		else
 		{
 			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[2]; // marker horizontaly opposite start = blue
             colorblindTexts[markerIndex[yPos, (xPos + 3) % 6]].text = "B";
-            Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is either +2 or +5, so the marker in the same row is BLUE", moduleId);
+            Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is +2 or +5, so the marker in the same row is BLUE", moduleId);
 		}
 		//coloring the marker in the same column as start
 		if (yOffset == 0 || yOffset == 5)
 		{
 			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[4]; // marker verticaly opposite start = purple
             colorblindTexts[markerIndex[(yPos + 3) % 6, xPos]].text = "P";
-            Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is either 0 or +5, so the marker in the same column is PURPLE", moduleId);
+            Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is 0 or +5, so the marker in the same column is PURPLE", moduleId);
 		}
 		else if (yOffset == 1 || yOffset == 4)
 		{
 			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[2]; // marker verticaly opposite start = blue
             colorblindTexts[markerIndex[(yPos + 3) % 6, xPos]].text = "B";
-            Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is either +1 or +4, so the marker in the same column is BLUE", moduleId);
+            Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is +1 or +4, so the marker in the same column is BLUE", moduleId);
 		}
 		else
 		{
 			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[3]; // marker verticaly opposite start = yellow
             colorblindTexts[markerIndex[(yPos + 3) % 6, xPos]].text = "Y";
-            Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is either +2 or +3, so the marker in the same column is YELLOW", moduleId);
+            Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is +2 or +3, so the marker in the same column is YELLOW", moduleId);
 		}
 	}
 
@@ -261,7 +261,7 @@ public class shiftedMazeScript : MonoBehaviour
 				markers[markerIndex[yPos, xPos]].color = fontColors[6]; // makes marker on curren position green
                 colorblindTexts[markerIndex[yPos, xPos]].text = "";
                 Audio.PlaySoundAtTransform("beep", transform); //play beep sound
-				Debug.LogFormat("[Shifted Maze #{0}] You moved on x:{1}, y:{2} and reached the first goal.", moduleId, xPos, yPos);
+				Debug.LogFormat("[Shifted Maze #{0}] You reached the first goal.", moduleId);
 			}
 			else if ((xPos == goals[3, 0]) && (yPos == goals[3, 1])) // and you revisit the start
 			{
@@ -271,7 +271,7 @@ public class shiftedMazeScript : MonoBehaviour
 			{
 				GetComponent<KMBombModule>().HandleStrike();
 				StartCoroutine(Strike());
-				Debug.LogFormat("[Shifted Maze #{0}] You moved on x:{1}, y:{2}. That's not your first goal, strike!", moduleId, xPos, yPos);
+				Debug.LogFormat("[Shifted Maze #{0}] You moved on a goal which is not your first goal, strike!", moduleId);
 			}
 		}
 		else if (stage == 1) // if you're in the secon Stage
@@ -282,13 +282,13 @@ public class shiftedMazeScript : MonoBehaviour
 				markers[markerIndex[yPos, xPos]].color = fontColors[6]; // makes marker on curren position green
                 colorblindTexts[markerIndex[yPos, xPos]].text = "";
                 Audio.PlaySoundAtTransform("beep", transform); //play beep sound
-				Debug.LogFormat("[Shifted Maze #{0}] You moved on x:{1}, y:{2} and reached the second goal.", moduleId, xPos, yPos);
+				Debug.LogFormat("[Shifted Maze #{0}] You reached the second goal.", moduleId);
 			}
 			else if ((xPos == goals[2, 0]) && (yPos == goals[2, 1])) // but you're on the position of the final goal, give a strike
 		  {
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifted Maze #{0}] You moved on x:{1}, y:{2}. That's not your second goal, strike!", moduleId, xPos, yPos);
+			Debug.LogFormat("[Shifted Maze #{0}] You moved on a goal which is not your second goal, strike!", moduleId);
 		  }
 			else // else, if you revisit the start or the position of goal 1, do nothing
 			{
@@ -307,7 +307,7 @@ public class shiftedMazeScript : MonoBehaviour
                 colorblindTexts[markerIndex[goals[3, 1], goals[3, 0]]].text = "";
                 Audio.PlaySoundAtTransform("beep", transform);
 
-				Debug.LogFormat("[Shifted Maze #{0}] You moved on x:{1}, y:{2} and reached the last goal. The module is solved!", moduleId, xPos, yPos);
+				Debug.LogFormat("[Shifted Maze #{0}] You reached the last goal. The module is solved!", moduleId);
 			}
 			else // but if you revisit every other position (start, 1st goal, 2nd goal), do nothing
 			{
@@ -328,18 +328,19 @@ public class shiftedMazeScript : MonoBehaviour
 		if ((xPos > 0) && (validMovLeft[(yPos + yOffset) %6, (xPos + xOffset) %6] == 1)) // if the move is allowed (no wall, no edge), increase the x value
 		{
 			xPos --;
+			Debug.LogFormat("[Shifted Maze #{0}] You moved left to x:{1}, y:{2}.", moduleId, xPos+1, yPos+1);
+			if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
+			{
+				CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+			}
 		}
 		else // if the move is not allowed handle a strike
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move left from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
+			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move left from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
 		}
 
-		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
-		{
-			CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
-		}
 		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
 		else {mazeIndex[maze[yPos, xPos]].color = fontColors[1];} // color the node you moved to white.
 	}
@@ -351,17 +352,20 @@ public class shiftedMazeScript : MonoBehaviour
 		GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, moveRight.transform);
 
 		mazeIndex[maze[yPos, xPos]].color = fontColors[0];
-		if ((xPos < 5) && (validMovLeft[(yPos + yOffset) %6, (xPos + xOffset + 1) %6] == 1)) {xPos ++;}
+		if ((xPos < 5) && (validMovLeft[(yPos + yOffset) %6, (xPos + xOffset + 1) %6] == 1))
+		{
+			xPos ++;
+			Debug.LogFormat("[Shifted Maze #{0}] You moved right to x:{1}, y:{2}.", moduleId, xPos+1, yPos+1);
+			if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
+			{
+				CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+			}
+		}
 		else
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move right from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
-		}
-
-		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
-		{
-			CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move right from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
 		}
 
 		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
@@ -375,17 +379,20 @@ public class shiftedMazeScript : MonoBehaviour
 		GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, moveUp.transform);
 
 		mazeIndex[maze[yPos, xPos]].color = fontColors[0];
-		if ((yPos > 0) && (validMovUp[(yPos + yOffset) %6, (xPos + xOffset) %6] == 1)) {yPos --;}
+		if ((yPos > 0) && (validMovUp[(yPos + yOffset) %6, (xPos + xOffset) %6] == 1))
+		{
+			yPos --;
+			Debug.LogFormat("[Shifted Maze #{0}] You moved up to x:{1}, y:{2}.", moduleId, xPos+1, yPos+1);
+			if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
+			{
+				CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+			}
+		}
 		else
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move up from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
-		}
-
-		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
-		{
-			CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move up from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
 		}
 
 		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
@@ -399,17 +406,20 @@ public class shiftedMazeScript : MonoBehaviour
 		GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, moveDown.transform);
 
 		mazeIndex[maze[yPos, xPos]].color = fontColors[0];
-		if ((yPos < 5) && (validMovUp[(yPos + yOffset + 1) %6, (xPos + xOffset) %6] == 1)) {yPos ++;}
+		if ((yPos < 5) && (validMovUp[(yPos + yOffset + 1) %6, (xPos + xOffset) %6] == 1))
+		{
+			yPos ++;
+			Debug.LogFormat("[Shifted Maze #{0}] You moved down to x:{1}, y:{2}.", moduleId, xPos+1, yPos+1);
+			if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
+			{
+				CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+			}
+		}
 		else
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move down from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos, yPos);
-		}
-
-		if ((xPos == 1 || xPos == 4) && (yPos == 1 || yPos == 4)) // if you moved to any of the four corner positions
-		{
-			CheckOnGoal(); // check if you solved that stage or the module or if you moved on a goal too early
+			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move down from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
 		}
 
 		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
