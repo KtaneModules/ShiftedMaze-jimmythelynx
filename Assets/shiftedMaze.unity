@@ -162,6 +162,11 @@ Prefab:
       propertyPath: AudioClips.Array.data[0]
       value: 
       objectReference: {fileID: 8300000, guid: ee6b7cc93ab144971b71a55a3656ec5d, type: 3}
+    - target: {fileID: 114848120511536268, guid: 8814ea52310d2614a9feda02ec355ae4,
+        type: 2}
+      propertyPath: EdgeworkConfiguration
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8814ea52310d2614a9feda02ec355ae4, type: 2}
   m_IsPrefabParent: 0
@@ -349,6 +354,11 @@ Prefab:
     - target: {fileID: 4015904797584956, guid: f1f789c84a1c94fe29e605b29a99909d, type: 2}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114941637960047570, guid: f1f789c84a1c94fe29e605b29a99909d,
+        type: 2}
+      propertyPath: _colorblindMode
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f1f789c84a1c94fe29e605b29a99909d, type: 2}

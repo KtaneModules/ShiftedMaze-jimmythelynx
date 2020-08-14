@@ -67,7 +67,7 @@ public class shiftedMazeScript : MonoBehaviour
 	private int stage = 0; // keeps track of how many stages (3 total) are solved
 	private int batteryCycle; // is the number D batteries mod 3
 
-	public Color[] fontColors; //these are the colors to change font colors 0 = black, 1 = white, 2 = blue, 3 = yellow, 4 = purple, 5 = invisible, 6 = neongreen, 7 = green
+	public Color[] fontColors; //these are the colors to change font colors 0 = black, 1 = white, 2 = blue, 3 = yellow, 4 = magenta, 5 = invisible, 6 = neongreen, 7 = green
  	public Material[] screenMaterial; //materials for the background screen 0 = blue, 1 = red
 	public MeshRenderer screen; // holds the connection to the screen object
 
@@ -156,18 +156,18 @@ public class shiftedMazeScript : MonoBehaviour
 	{
 		batteryCycle = bomb.GetBatteryCount(Battery.D) % 3;
 
-		goals[Mod((0 - batteryCycle), 3), 0] = (xPos + 3) % 6; //this makes the first goal diagonally opposite of the starting location
+		goals[Mod((0 - batteryCycle), 3), 0] = (xPos + 3) % 6; //this sets the diagonally opposite goal depening on number of D cells
 		goals[Mod((0 - batteryCycle), 3), 1] = (yPos + 3) % 6;
 
-		goals[Mod((1 - batteryCycle), 3), 0] = (xPos + 3) % 6; // this makes the second goal horizontally opposite of the starting location
+		goals[Mod((1 - batteryCycle), 3), 0] = (xPos + 3) % 6; //this sets the horizotally opposite goal depening on number of D cells
 		goals[Mod((1 - batteryCycle), 3), 1] = yPos;
 
-		goals[2 - batteryCycle, 0] = xPos; // this makes the final goal vertically opposite of the starting location
+		goals[2 - batteryCycle, 0] = xPos; // //this sets the vertically opposite goal depening on number of D cells
 		goals[2 - batteryCycle, 1] = (yPos + 3) % 6;
 
-		Debug.LogFormat("[Shifted Maze #{0}] Your initial route is to: x:{1}, y:{2} then to x:{3}, y:{4} finally to x:{5}, y:{6}.", moduleId, goals[0, 0]+1, goals[0, 1]+1, goals[1, 0]+1, goals[1, 1]+1, goals[2, 0]+1, goals[2, 1]+1);
-		Debug.LogFormat("[Shifted Maze #{0}] Number of D-Batteries is: {1}, thus cycle the goals forward by {2}", moduleId, bomb.GetBatteryCount(Battery.D), batteryCycle);
-		Debug.LogFormat("[Shifted Maze #{0}] You first go to the marker in the {1}, then to the marker in the {2} and finally to the marker in the {3}, relative to the starting position.", moduleId, markerLog[batteryCycle], markerLog[(batteryCycle + 1) %3], markerLog[(batteryCycle + 2) %3]);
+		Debug.LogFormat("[Shifted Maze #{0}] Number of D-Batteries: {1}, thus cycle the goals forward by {2}", moduleId, bomb.GetBatteryCount(Battery.D), batteryCycle);
+		Debug.LogFormat("[Shifted Maze #{0}] First go to the marker in the {1}, then to the marker in the {2} and finally to the marker in the {3}, relative to the starting position.", moduleId, markerLog[batteryCycle], markerLog[(batteryCycle + 1) %3], markerLog[(batteryCycle + 2) %3]);
+		Debug.LogFormat("[Shifted Maze #{0}] Route is: x:{1}, y:{2} -> x:{3}, y:{4} -> x:{5}, y:{6}.", moduleId, goals[0, 0]+1, goals[0, 1]+1, goals[1, 0]+1, goals[1, 1]+1, goals[2, 0]+1, goals[2, 1]+1);
 	}
 
 	int Mod(int x, int m) // modulo function that always gives me a positive value back
@@ -191,9 +191,9 @@ public class shiftedMazeScript : MonoBehaviour
 			}
 			else // if x offset is over 2 but y is lower
 			{
-				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[4]; // marker diagonaly opposite start = purple
-                colorblindTexts[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].text = "P";
-                Debug.LogFormat("[Shifted Maze #{0}] The x offset is above 2 but the y offset is below 2, so the diagonally opposite marker is PURPLE", moduleId);
+				markers[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].color = fontColors[4]; // marker diagonaly opposite start = magenta
+                colorblindTexts[markerIndex[(yPos + 3) % 6, (xPos + 3) % 6]].text = "M";
+                Debug.LogFormat("[Shifted Maze #{0}] The x offset is above 2 but the y offset is below 2, so the diagonally opposite marker is MAGENTA", moduleId);
 			}
 		}
 		else
@@ -220,9 +220,9 @@ public class shiftedMazeScript : MonoBehaviour
 		}
 		else if (xOffset == 1 || xOffset == 3)
 		{
-			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[4]; // marker horizontaly opposite start = purple
-            colorblindTexts[markerIndex[yPos, (xPos + 3) % 6]].text = "P";
-            Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is +1 or +3, so the marker in the same row is PURPLE", moduleId);
+			markers[markerIndex[yPos, (xPos + 3) % 6]].color = fontColors[4]; // marker horizontaly opposite start = magenta
+            colorblindTexts[markerIndex[yPos, (xPos + 3) % 6]].text = "M";
+            Debug.LogFormat("[Shifted Maze #{0}] The horizontal offset is +1 or +3, so the marker in the same row is MAGENTA", moduleId);
 		}
 		else
 		{
@@ -233,9 +233,9 @@ public class shiftedMazeScript : MonoBehaviour
 		//coloring the marker in the same column as start
 		if (yOffset == 0 || yOffset == 5)
 		{
-			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[4]; // marker verticaly opposite start = purple
-            colorblindTexts[markerIndex[(yPos + 3) % 6, xPos]].text = "P";
-            Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is 0 or +5, so the marker in the same column is PURPLE", moduleId);
+			markers[markerIndex[(yPos + 3) % 6, xPos]].color = fontColors[4]; // marker verticaly opposite start = magenta
+            colorblindTexts[markerIndex[(yPos + 3) % 6, xPos]].text = "M";
+            Debug.LogFormat("[Shifted Maze #{0}] The vertical offset is 0 or +5, so the marker in the same column is MAGENTA", moduleId);
 		}
 		else if (yOffset == 1 || yOffset == 4)
 		{
