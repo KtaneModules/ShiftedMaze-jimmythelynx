@@ -149,7 +149,7 @@ public class shiftedMazeScript : MonoBehaviour
         colorblindTexts[markerIndex[yPos, xPos]].text = "W";
         goals[3, 0] = xPos; // remembering starting position
 		goals[3, 1] = yPos;
-		Debug.LogFormat("[Shifted Maze #{0}] Your starting position is: x:{1}, y:{2}. (With 1,1 being the top left corner.)", moduleId, xPos+1, yPos+1);
+		Debug.LogFormat("[Shifted Maze #{0}] Starting position is: x:{1}, y:{2}. (With 1,1 being the top left corner.)", moduleId, xPos+1, yPos+1);
 	}
 
 	void CalculateGoals()
@@ -166,7 +166,7 @@ public class shiftedMazeScript : MonoBehaviour
 		goals[2 - batteryCycle, 1] = (yPos + 3) % 6;
 
 		Debug.LogFormat("[Shifted Maze #{0}] Number of D-Batteries: {1}, thus cycle the goals forward by {2}", moduleId, bomb.GetBatteryCount(Battery.D), batteryCycle);
-		Debug.LogFormat("[Shifted Maze #{0}] First go to the marker in the {1}, then to the marker in the {2} and finally to the marker in the {3}, relative to the starting position.", moduleId, markerLog[batteryCycle], markerLog[(batteryCycle + 1) %3], markerLog[(batteryCycle + 2) %3]);
+		Debug.LogFormat("[Shifted Maze #{0}] First go to the marker in the {1}, then to the marker in the {2} and finally to the marker in the {3} (relative to the starting position).", moduleId, markerLog[batteryCycle], markerLog[(batteryCycle + 1) %3], markerLog[(batteryCycle + 2) %3]);
 		Debug.LogFormat("[Shifted Maze #{0}] Route is: x:{1}, y:{2} -> x:{3}, y:{4} -> x:{5}, y:{6}.", moduleId, goals[0, 0]+1, goals[0, 1]+1, goals[1, 0]+1, goals[1, 1]+1, goals[2, 0]+1, goals[2, 1]+1);
 	}
 
@@ -338,7 +338,7 @@ public class shiftedMazeScript : MonoBehaviour
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move left from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
+			Debug.LogFormat("[Shifted Maze #{0}] You tried to move left from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
 		}
 
 		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
@@ -365,7 +365,7 @@ public class shiftedMazeScript : MonoBehaviour
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move right from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
+			Debug.LogFormat("[Shifted Maze #{0}] You tried to move right from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
 		}
 
 		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
@@ -392,7 +392,7 @@ public class shiftedMazeScript : MonoBehaviour
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move up from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
+			Debug.LogFormat("[Shifted Maze #{0}] You tried to move up from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
 		}
 
 		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
@@ -419,7 +419,7 @@ public class shiftedMazeScript : MonoBehaviour
 		{
 			GetComponent<KMBombModule>().HandleStrike();
 			StartCoroutine(Strike());
-			Debug.LogFormat("[Shifted Maze #{0}] Your tried to move down from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
+			Debug.LogFormat("[Shifted Maze #{0}] You tried to move down from x:{1}, y:{2} and ran into a wall, strike!", moduleId, xPos+1, yPos+1);
 		}
 
 		if (moduleSolved) {mazeIndex[maze[yPos, xPos]].color = fontColors[0];} // marks your current position in the grid black
