@@ -51,15 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Examples\1.1 Module\ExampleModule.cs" />
-     <Compile Include="Assets\Examples\1.10 NeedyModule\ExampleNeedyModule.cs" />
-     <Compile Include="Assets\Examples\1.12 Holdable\BombCreatorExample.cs" />
-     <Compile Include="Assets\Examples\1.13 GameEffectsPlayer\GameEffectPlayer.cs" />
-     <Compile Include="Assets\Examples\1.2 Module2\ExampleModule2.cs" />
-     <Compile Include="Assets\Examples\1.3 GameplayRoom\ExampleGameplayRoom.cs" />
-     <Compile Include="Assets\Examples\1.5 WebService\ExampleWebService.cs" />
-     <Compile Include="Assets\Examples\1.8 Button Masher Module\ButtonMasherModule.cs" />
-     <Compile Include="Assets\Examples\1.9 Widget\ExampleWidget.cs" />
      <Compile Include="Assets\Scripts\Easing.cs" />
      <Compile Include="Assets\Scripts\GeneralExtensions.cs" />
      <Compile Include="Assets\Scripts\KMBombInfoExtensions.cs" />
@@ -88,19 +79,19 @@
      <Compile Include="Assets\TestHarness\Widgets\SerialNumber.cs" />
      <Compile Include="Assets\TestHarness\Widgets\TwoFactorWidget.cs" />
      <Compile Include="Assets\TestHarness\Widgets\Widget.cs" />
-     <None Include="Assets\Examples\Assets\Shaders\KT_3D_Text-Diffuse.shader" />
-     <None Include="Assets\Examples\Assets\Shaders\BlendTwoTexturesUnlit.shader" />
-     <None Include="Assets\Examples\Assets\Shaders\BlendTwoTexturesLitAndUnlitVertexColor.shader" />
-     <None Include="Assets\Examples\Assets\Shaders\KT_Mobile-Diffuse.shader" />
-     <None Include="Assets\Examples\Assets\Shaders\KT_3D_Text.shader" />
+     <None Include="Assets\Shaders\KT_3D_Text-Diffuse.shader" />
+     <None Include="Assets\Shaders\BlendTwoTexturesUnlit.shader" />
+     <None Include="Assets\Shaders\BlendTwoTexturesLitAndUnlitVertexColor.shader" />
+     <None Include="Assets\Shaders\KT_Mobile-Diffuse.shader" />
+     <None Include="Assets\Shaders\KT_3D_Text.shader" />
      <None Include="Assets\TestHarness\Shaders\Outline.shader" />
-     <None Include="Assets\Examples\Assets\Shaders\MobileTransparentDiffuseUnderlay.shader" />
+     <None Include="Assets\Shaders\MobileTransparentDiffuseUnderlay.shader" />
      <None Include="Assets\TestHarness\_THIS_FOLDER_IS_EXCLUDED_FROM_BUNDLES.txt" />
      <None Include="Assets\TestHarness\Widgets\Shaders\3DText.shader" />
-     <None Include="Assets\Examples\Assets\Shaders\UnlitTransparentVertexColorUnderlay.shader" />
-     <None Include="Assets\Examples\Assets\Shaders\KT_Mobile-Diffuse-tint.shader" />
-     <None Include="Assets\Examples\Assets\Shaders\UnlitTexturedLightmap.shader" />
-     <None Include="Assets\Examples\Assets\Shaders\BlendTwoTexturesLitAndUnlit.shader" />
+     <None Include="Assets\Shaders\UnlitTransparentVertexColorUnderlay.shader" />
+     <None Include="Assets\Shaders\KT_Mobile-Diffuse-tint.shader" />
+     <None Include="Assets\Shaders\UnlitTexturedLightmap.shader" />
+     <None Include="Assets\Shaders\BlendTwoTexturesLitAndUnlit.shader" />
  <Reference Include="UnityEngine.CoreModule">
  <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
  </Reference>
