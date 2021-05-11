@@ -60,7 +60,7 @@ public class shiftedMazeScript : MonoBehaviour
 																					 	 {1, 1, 0, 1, 1, 1},
 																					 	 {1, 1, 1, 1, 1, 0} };
 
-    private int[] possibleStart = new int[2] {1, 4}; //holds the two possible position for inital xPos and yPos (1,1 / 1,4 / 4,1 / 4,4)
+  private int[] possibleStart = new int[2] {1, 4}; //holds the two possible position for inital xPos and yPos (1,1 / 1,4 / 4,1 / 4,4)
 
 	private int[,] goals = new int[4, 2] { {0, 0}, {0, 0}, {0, 0}, {0, 0} };// goals for stage 1, 2 and 3 and starting Position: (x, y)
 
@@ -71,9 +71,9 @@ public class shiftedMazeScript : MonoBehaviour
  	public Material[] screenMaterial; //materials for the background screen 0 = blue, 1 = red
 	public MeshRenderer screen; // holds the connection to the screen object
 
-    public KMColorblindMode colorblindMode; //the colorblind object attached to the module
-    public TextMesh[] colorblindTexts; //the texts used to display the color if colorblind mode is enabled
-    private bool colorblindActive = false; //a boolean used for knowing if colorblind mode is active
+  public KMColorblindMode colorblindMode; //the colorblind object attached to the module
+  public TextMesh[] colorblindTexts; //the texts used to display the color if colorblind mode is enabled
+  private bool colorblindActive = false; //a boolean used for knowing if colorblind mode is active
 
 	//Logging
 	static int moduleIdCounter = 1;
@@ -86,23 +86,23 @@ public class shiftedMazeScript : MonoBehaviour
 	void Awake ()
 	{
 		moduleId = moduleIdCounter++;
-        //check for colorblind mode
-        colorblindActive = colorblindMode.ColorblindModeActive;
-        //disable all text on the module until the lights turn on
-        foreach (TextMesh text in mazeIndex)
-        {
-            text.gameObject.SetActive(false);
-        }
-        foreach (TextMesh text in markers)
-        {
-            text.gameObject.SetActive(false);
-        }
-        //delegate button press to method
-        moveLeft.OnInteract += delegate () { PressLeft(); return false; };
+    //check for colorblind mode
+    colorblindActive = colorblindMode.ColorblindModeActive;
+    //disable all text on the module until the lights turn on
+    foreach (TextMesh text in mazeIndex)
+    {
+      text.gameObject.SetActive(false);
+    }
+    foreach (TextMesh text in markers)
+    {
+      text.gameObject.SetActive(false);
+    }
+    //delegate button press to method
+    moveLeft.OnInteract += delegate () { PressLeft(); return false; };
 		moveRight.OnInteract += delegate () { PressRight(); return false; };
 		moveUp.OnInteract += delegate () { PressUp(); return false; };
 		moveDown.OnInteract += delegate () { PressDown(); return false; };
-        GetComponent<KMBombModule>().OnActivate += OnActivate;
+    GetComponent<KMBombModule>().OnActivate += OnActivate;
 	}
 
 	// Use this for initialization
@@ -113,31 +113,25 @@ public class shiftedMazeScript : MonoBehaviour
 		CalculateOffset();
 	}
 
-	// Update is called once per frame
-/*/	void Update ()
-	{
-
-	}/*/
-
-    void OnActivate()
+  void OnActivate()
+  {
+  	//the lights have turned on, activate all text
+    foreach (TextMesh text in mazeIndex)
     {
-        //the lights have turned on, activate all text
-        foreach (TextMesh text in mazeIndex)
-        {
-            text.gameObject.SetActive(true);
-        }
-        foreach (TextMesh text in markers)
-        {
-            text.gameObject.SetActive(true);
-        }
-        if (colorblindActive)
-        {
-            foreach (TextMesh text in colorblindTexts)
-            {
-                text.gameObject.SetActive(true);
-            }
-        }
+      text.gameObject.SetActive(true);
     }
+    foreach (TextMesh text in markers)
+    {
+      text.gameObject.SetActive(true);
+    }
+    if (colorblindActive)
+    {
+      foreach (TextMesh text in colorblindTexts)
+    	{
+        text.gameObject.SetActive(true);
+      }
+    }
+  }
 
 	void CalculateStartingPoint()
 	{
@@ -147,7 +141,7 @@ public class shiftedMazeScript : MonoBehaviour
 		markers[markerIndex[yPos, xPos]].color = fontColors[1]; // makes the marker on the starting position white
         colorblindTexts[markerIndex[yPos, xPos]].gameObject.transform.localScale = new Vector3(0.006f, 0.006f, 0.007f); // makes the colorblind text for white fit
         colorblindTexts[markerIndex[yPos, xPos]].text = "W";
-        goals[3, 0] = xPos; // remembering starting position
+    goals[3, 0] = xPos; // remembering starting position
 		goals[3, 1] = yPos;
 		Debug.LogFormat("[Shifted Maze #{0}] Starting position is: x:{1}, y:{2}. (With 1,1 being the top left corner.)", moduleId, xPos+1, yPos+1);
 	}
