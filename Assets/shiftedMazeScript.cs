@@ -141,7 +141,7 @@ public class shiftedMazeScript : MonoBehaviour
 		markers[markerIndex[yPos, xPos]].color = fontColors[1]; // makes the marker on the starting position white
         colorblindTexts[markerIndex[yPos, xPos]].gameObject.transform.localScale = new Vector3(0.006f, 0.006f, 0.007f); // makes the colorblind text for white fit
         colorblindTexts[markerIndex[yPos, xPos]].text = "W";
-    goals[3, 0] = xPos; // remembering starting position
+    	goals[3, 0] = xPos; // remembering starting position
 		goals[3, 1] = yPos;
 		Debug.LogFormat("[Shifted Maze #{0}] Starting position is: x:{1}, y:{2}. (With 1,1 being the top left corner.)", moduleId, xPos+1, yPos+1);
 	}
